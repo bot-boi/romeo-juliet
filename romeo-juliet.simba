@@ -1,0 +1,189 @@
+program romeoJuliet;
+
+// TODO: randomize camera, handle romeo stuck in general store
+
+{$DEFINE DEBUG}
+
+{$include_once Script/script.simba}
+{$include_once Script/extra.simba}
+
+{$include_once constants.simba}
+{$include_once finders.simba}
+
+const
+  MANSION = '/home/noone/Simba1.3/Scripts/romeo-juliet/maps/juliet-mansion-first-floor.png';   // mansion first floor
+
+// try until timeout or fn return true
+procedure TryFor(fn: Function(): Boolean; timeout: Integer);
+var
+  counter: TCountdown;
+begin
+  counter.Init(timeout);
+  while (not counter.IsFinished()) do begin
+    if (fn() = True) then Exit;
+  end;
+end;
+
+label
+  CadavaBush, Romeo1, Juliet1, RomeoLetter, FatherLawrence, Apothecary, Juliet2, Romeo2;
+
+begin
+  Script.Init('/usr/games/runescape --prmfile=oldschool.prm & echo -ne "\n"');
+  {$include_once player-declarations.simba}
+  Script.Login();
+
+  {$IFDEF DEBUG}
+    writeln('waiting for manual setup.  press enter to continue...');
+    while not IsKeyDown(VK_ENTER) do begin
+      Wait(25);
+    end;
+    writeln('done setup!');
+  {$ENDIF}
+
+  goto Apothecary;
+
+  CadavaBush:   // get cadava berries at the start
+    writeln('get berries first thing');
+    Script.LoadMap('world.png');
+    TravelTo(Point(4885, 3128)); // crossroads between Varrock and lumby; where the crier is
+    TravelTo(P.CadavaBush, 8);
+    TryFor(@ClickCadavaBush, ONE_SECOND*15);
+    Wait(1000, 3000);
+    TravelTo(Point(4885, 3128)); // if we dont do this we will walk straight through the dark wizards >.<
+
+  Romeo1:      // talk to romeo to start quest
+    writeln('start quest');
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.Romeo);
+    TryFor(@ClickRomeo, ONE_SECOND*30);
+    Wait(3000, 8000);
+    DoDialogue([0, 0, 2]);
+    Wait(1000, 3000);
+
+  Juliet1:     // talk to juliet
+    writeln('speak to juliet first time');
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.JulietFrontDoor[0]);
+    TryFor(@ClickJulietFrontDoor, ONE_SECOND*15);
+
+    TravelTo(P.JulietBottomStair[1]);
+    TryFor(@ClickJulietBottomStair, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    Script.LoadMap(MANSION, 4);          // ughhhhhh
+    WalkToPos(P.JulietInsideDoor[0]);
+    TryFor(@ClickJulietInsideDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    WalkToPos(P.JulietBalconyDoor[0]);
+    TryFor(@ClickJulietBalconyDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    TryFor(@ClickJuliet, ONE_SECOND*15);
+    Wait(3000, 8000);
+    DoDialogue([]);
+                                        // leave mansion
+    WalkToPos(P.JulietBalconyDoor[0]);
+    TryFor(@ClickJulietBalconyDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    WalkToPos(P.JulietInsideDoor[0]);
+    TryFor(@ClickJulietInsideDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    WalkToPos(P.JulietTopStair[0]);
+    TryFor(@ClickJulietTopStair, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.JulietFrontDoor[0]);
+    TryFor(@ClickJulietFrontDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+  RomeoLetter:
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.Romeo);
+    TryFor(@ClickRomeo, ONE_SECOND*15);
+    Wait(3000, 8000);
+    DoDialogue([]);
+
+  FatherLawrence:
+    writeln('talk to father lawrence');
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.FatherLawrence);
+    TryFor(@ClickFatherLawrence, ONE_SECOND*15);
+    Wait(3000, 8000);
+    DoDialogue([]);
+    Wait(15000, 20000); // wait for cutscene thing
+    DoDialogue([]);
+
+  Apothecary:
+    writeln('get cadava potion made');
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.ApothecaryDoor[0]);
+    TryFor(@ClickApothecaryDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    TryFor(@ClickApothecary, ONE_SECOND*15);
+    Wait(3000, 8000);
+    DoDialogue([1, 0]);
+    Wait(1000, 3000);
+    DoDialogue([]);
+
+  Juliet2:     // talk to juliet again, ree this is duplicate code
+    writeln('give juliet potion');
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.JulietFrontDoor[0]);
+    TryFor(@ClickJulietFrontDoor, ONE_SECOND*15);
+
+    TravelTo(P.JulietBottomStair[0]);
+    TryFor(@ClickJulietBottomStair, ONE_SECOND*15);
+
+    Script.LoadMap(MANSION, 4);          // ughhhhhh
+    WalkToPos(P.JulietInsideDoor[0]);
+    TryFor(@ClickJulietInsideDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    WalkToPos(P.JulietBalconyDoor[0]);
+    TryFor(@ClickJulietBalconyDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    TryFor(@ClickJuliet, ONE_SECOND*15);
+    Wait(3000, 8000);
+    DoDialogue([]);                     // give potion, wait cutscene
+    Wait(3000, 8000);
+    DoDialogue([]);                  // todo: make dodialogue not suck so much
+    Wait(3000, 8000);
+    DoDialogue([]);
+    Wait(3000, 8000);
+    DoDialogue([]);
+    Wait(3000, 8000);
+                                        // leave mansion
+    WalkToPos(P.JulietBalconyDoor[0]);
+    TryFor(@ClickJulietBalconyDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    WalkToPos(P.JulietInsideDoor[0]);
+    TryFor(@ClickJulietInsideDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    WalkToPos(P.JulietTopStair[0]);
+    TryFor(@ClickJulietTopStair, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.JulietFrontDoor[0]);
+    TryFor(@ClickJulietFrontDoor, ONE_SECOND*15);
+    Wait(1000, 3000);
+
+  Romeo2:
+    writeln('romeo crypt');
+    Script.LoadMap('world.png', 4);
+    TravelTo(P.Romeo);
+    TryFor(@ClickRomeo, ONE_SECOND*30);
+    Wait(3000, 8000);
+    DoDialogue([]);
+
+    writeln('wait for crypt cutscene stuff');
+    Wait(ONE_MINUTE);
+end.

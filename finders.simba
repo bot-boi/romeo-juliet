@@ -1,0 +1,96 @@
+// color & positional clickers
+
+// tested and working
+function ClickApothecary(): Boolean;
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInDots([MMDotNPC], C.Apothecary, 3, [20, 500]);
+  Result := TryClickATPA(atpa, ['Apothecary'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+
+// tested and working
+function ClickApothecaryDoor(): Boolean; // only open
+var
+  atpa: T2DPointArray;
+begin                                                                          // True: get all tiles between points
+  atpa := GetColorsInTiles(P.ApothecaryDoor, C.ApothecaryDoor, 5, [50, 2000], True);
+  Result := TryClickATPA(atpa, ['Open Door'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+
+// tested and working
+function ClickCadavaBush(): Boolean;
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInTiles([P.CadavaBush], C.CadavaBush, 6, [50, 1000]);
+  Result := TryClickATPA(atpa, ['Cadava bush'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+
+// tested and working
+function ClickFatherLawrence(): Boolean;
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInDots([MMDotNPC], C.FatherLawrence, 3, [50, 2000]);
+  Result := TryClickATPA(atpa, ['Father'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+
+// tested and working
+function ClickJuliet(): Boolean;
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInDots([MMDotNPC], C.Juliet, 4, [50, 2000]);
+  Result := TryClickATPA(atpa, ['Juliet'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+
+// tested and working
+function ClickJulietDoor(doorPositions: Array[0..1] of TPoint): Boolean; // only open
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInTiles(doorPositions, C.JulietDoor, 5, [50, 2000], True);
+  Result := TryClickATPA(atpa, ['Open Door'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+  if Mainscreen.IsUpText('Close') then Result := True; // case: door is open
+end;
+function ClickJulietFrontDoor(): Boolean;
+begin
+  Result := ClickJulietDoor(P.JulietFrontDoor);
+end;
+function ClickJulietInsideDoor(): Boolean;
+begin
+  Result := ClickJulietDoor(P.JulietInsideDoor);
+end;
+function ClickJulietBalconyDoor(): Boolean;
+begin
+  Result := ClickJulietDoor(P.JulietBalconyDoor);
+end;
+
+// tested and working
+function ClickJulietStair(stairPositions: Array[0..1] of TPoint): Boolean;
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInTiles(stairPositions, C.JulietStair, 3, [200, 10000], True);
+  Result := TryClickATPA(atpa, ['Staircase'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+function ClickJulietBottomStair(): Boolean;
+begin
+  Result := ClickJulietStair(P.JulietBottomStair);
+end;
+function ClickJulietTopStair(): Boolean;
+begin
+  Result := ClickJulietStair(P.JulietTopStair);
+end;
+
+// tested and working
+function ClickRomeo(): Boolean;
+var
+  atpa: T2DPointArray;
+begin
+  atpa := GetColorsInDots([MMDotNPC], C.Romeo, 5, [20, 1000]);
+  Result := TryClickATPA(atpa, ['Romeo'], RandomRange(2*ONE_SECOND, 4*ONE_SECOND));
+end;
+
+

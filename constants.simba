@@ -1,0 +1,34 @@
+type TColors = record
+    Apothecary, ApothecaryDoor, CadavaBush, FatherLawrence, Juliet, JulietStair, JulietDoor, Romeo: TCTS2Color;
+  end;
+
+type TPositions = record
+    ApothecaryDoor, JulietBalconyDoor, JulietBottomStair, JulietFrontDoor, JulietInsideDoor, JulietTopStair: Array[0..1] of TPoint;
+    CadavaBush, FatherLawrence, Romeo: TPoint;
+  end;
+
+var
+  C: TColors;
+  P: TPositions;
+
+begin
+  C.Apothecary     := CTS2(2494777,  8, 0.12, 0.97); // vest color
+  C.ApothecaryDoor := CTS2(3628652,  9, 0.09, 0.65);
+  C.CadavaBush     := CTS2(6520662,  8, 0.06, 0.10);
+  C.FatherLawrence := CTS2(1846060,  7, 0.16, 1.10);
+  C.Juliet         := CTS2(7039908, 24, 0.05, 0.55);
+  C.JulietDoor     := CTS2(2905185,  9, 0.05, 0.23);
+  C.JulietStair    := CTS2(3495007,  5, 0.14, 0.24);
+  C.Romeo          := CTS2(4404081, 10, 0.58, 0.13);
+
+  P.ApothecaryDoor    := [Point(4574, 2836), Point(4578, 2832)]; // 2836
+  P.JulietBalconyDoor := [Point( 136,  178), Point( 144,  182)]; // 138
+  P.JulietBottomStair := [Point(4432, 2704), Point(4442, 2708)];
+  P.JulietFrontDoor   := [Point(4469, 2716), Point(4465, 2712)]; // 2716
+  P.JulietInsideDoor  := [Point( 132,  162), Point( 140,  166)]; // 136
+  P.JulietTopStair    := [Point( 132,  142), Point( 136,  146)];
+
+  P.CadavaBush        := Point(4918, 2952);
+  P.FatherLawrence    := Point(4830, 2521);
+  P.Romeo             := Point(4655, 2755);
+end;
